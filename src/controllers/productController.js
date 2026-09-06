@@ -1,4 +1,4 @@
-﻿import { ProductModel } from "../models/productModel.js";
+import { ProductModel } from "../models/productModel.js";
 
 export const ProductController = {
   async getAll(req, res) {
@@ -21,6 +21,16 @@ export const ProductController = {
 
   async create(req, res) {
     try {
+      const { price, stock } = req.body;
+
+      if (price !== undefined && (isNaN(price) || Number(price) < 0)) {
+        return res.status(400).json({ error: "Harga tidak boleh kurang dari 0" });
+      }
+
+      if (stock !== undefined && (isNaN(stock) || Number(stock) < 0)) {
+        return res.status(400).json({ error: "Stok tidak boleh kurang dari 0" });
+      }
+
       const product = await ProductModel.create(req.body);
       res.status(201).json(product);
     } catch (err) {
@@ -30,6 +40,16 @@ export const ProductController = {
 
   async update(req, res) {
     try {
+      const { price, stock } = req.body;
+
+      if (price !== undefined && (isNaN(price) || Number(price) < 0)) {
+        return res.status(400).json({ error: "Harga tidak boleh kurang dari 0" });
+      }
+
+      if (stock !== undefined && (isNaN(stock) || Number(stock) < 0)) {
+        return res.status(400).json({ error: "Stok tidak boleh kurang dari 0" });
+      }
+
       const product = await ProductModel.update(req.params.id, req.body);
       res.json(product);
     } catch (err) {
